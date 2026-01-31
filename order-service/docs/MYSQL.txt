@@ -1,0 +1,38 @@
+mysql -u root -p
+
+create database order_service;
+
+show databases;
+
+mysql> use order_service;
+Database changed
+
+mysql> show tables;
++------------------------------+
+| Tables_in_order_service      |
++------------------------------+
+| order_line_items             |
+| orders                       |
+| orders_order_line_items_list |
+| orders_seq                   |
++------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from orders;
++----+--------------------------------------+
+| id | order_number                         |
++----+--------------------------------------+
+|  1 | 041eadb3-f0c6-480d-878d-429031ecc960 |
+|  2 | 360c2349-bf4c-4f97-ac44-93015ae62480 |
+| 52 | 382bf248-9f98-4ed7-bb76-859b0d8eca73 |
++----+--------------------------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from order_line_items;
++----+---------+----------+-----------+
+| id | price   | quantity | sku_code  |
++----+---------+----------+-----------+
+|  1 | 1700.00 |        1 | iphone_17 |
+|  2 | 1800.00 |        1 | iphone_18 |
+|  3 | 1900.00 |        1 | iphone_19 |
++----+---------+----------+-----------+

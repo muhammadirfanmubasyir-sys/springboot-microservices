@@ -1,0 +1,28 @@
+mysql -u root -p
+
+create database inventory_service;
+
+show databases;
+
+mysql> use inventory_service;
+Database changed
+
+mysql> show tables;
++-----------------------------+
+| Tables_in_inventory_service |
++-----------------------------+
+| inventory                   |
++-----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from inventory;
++----+----------+------------------+
+| id | quantity | sku_code         |
++----+----------+------------------+
+|  1 |       10 | Iphone-25        |
+|  2 |        0 | Iphone-25-promax |
+|  3 |       10 | Iphone-40        |
+|  4 |        0 | Iphone-40-promax |
++----+----------+------------------+
+5 rows in set (0.00 sec)
+
