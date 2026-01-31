@@ -29,8 +29,12 @@ public class ProductService {
         Product newProduct = productRepository.save(product);
         log.info("PRODUCT IS CREATED SUCCESSFULLY, ID = " +  newProduct.getId());
 
-        return new ProductResponse(newProduct.getId(), newProduct.getName(), newProduct.getDescription(), newProduct.getPrice());
-
+        return ProductResponse.builder()
+                    .id(newProduct.getId())
+                    .name(newProduct.getName())
+                    .description(newProduct.getDescription())
+                    .price(newProduct.getPrice())
+                    .build();
     }
 
     public List<ProductResponse> getAllProducts() {
