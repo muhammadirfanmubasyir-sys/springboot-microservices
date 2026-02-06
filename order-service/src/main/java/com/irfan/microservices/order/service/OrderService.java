@@ -56,7 +56,7 @@ public class OrderService {
 
         if (!isProductInStock) {
             qty = -1;
-            log.info("QUANTITY OR PRODUCT IS NOT EXIST");
+            log.info("QUANTITY OR PRODUCT IS NOT EXIST !");
         }
 
         OrderLineItems orderLineItems = new OrderLineItems();
