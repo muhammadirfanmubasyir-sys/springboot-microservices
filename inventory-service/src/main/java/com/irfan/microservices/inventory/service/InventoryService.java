@@ -19,4 +19,10 @@ public class InventoryService {
         log.info(" STOCK PRODUCT [" + skuCode + "] IS " + isInStock );
         return  isInStock;
     }
+
+    public boolean isInStock(String skuCode, Integer quantity) {
+        boolean isInStock = inventoryRepository.findBySkuCodeAndQuantity(skuCode, quantity).isPresent();
+        log.info(" STOCK PRODUCT [" + skuCode + "] AND QTY [" + quantity + "] IS " + isInStock );
+        return  isInStock;
+    }
 }

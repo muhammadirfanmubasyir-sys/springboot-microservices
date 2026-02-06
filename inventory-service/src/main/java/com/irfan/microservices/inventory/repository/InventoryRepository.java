@@ -9,4 +9,5 @@ import java.util.Optional;
 @Component
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     Optional<Inventory> findBySkuCode(String skuCode);
+    Optional<Inventory> findBySkuCodeAndQuantity(String skuCode, Integer quantity);
 }
