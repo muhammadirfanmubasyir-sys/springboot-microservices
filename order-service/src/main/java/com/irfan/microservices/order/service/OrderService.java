@@ -22,7 +22,7 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final InventoryClient inventoryClient;
+    private final InventoryClient inventoryClient; //feign client
 
     public void placeOrder(OrderRequest orderRequest) throws Exception {
         Order order = new Order();
@@ -56,7 +56,7 @@ public class OrderService {
 
         if (!isProductInStock) {
             qty = -1;
-            log.info("QUANTITY OR PRODUCT IS NOT EXIST !");
+            log.info("PRODUCT WITH CODE: " + skuCode + " DOES NOT HAVE STOCK !");
         }
 
         OrderLineItems orderLineItems = new OrderLineItems();
