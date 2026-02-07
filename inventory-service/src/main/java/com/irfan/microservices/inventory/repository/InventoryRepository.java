@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     Optional<Inventory> findBySkuCode(String skuCode);
     Optional<Inventory> findBySkuCodeAndQuantity(String skuCode, Integer quantity);
-    Optional<Inventory> findBySkuCodeAndQuantityLessThanEqual(String skuCode, Integer quantity);
+    Optional<Inventory> findBySkuCodeAndQuantityGreaterThanEqual(String skuCode, Integer quantity);
 
     @Query("SELECT obj FROM Inventory obj WHERE obj.skuCode = :skuCode AND obj.quantity >= :qty")
     Optional<Inventory> findWithSkuCodeAndQuantity(@Param("skuCode") String skuCode, @Param("qty") Integer quantity);
