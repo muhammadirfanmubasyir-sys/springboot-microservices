@@ -21,7 +21,7 @@ public class InventoryService {
     }
 
     public boolean isInStock(String skuCode, Integer quantity) {
-        boolean isInStock = inventoryRepository.findBySkuCodeAndQuantity(skuCode, quantity).isPresent();
+        boolean isInStock = inventoryRepository.findNativeWithSkuCodeAndQuantity(skuCode, quantity).isPresent();
         log.info(" STOCK PRODUCT [" + skuCode + "] AND QTY [" + quantity + "] IS " + isInStock );
         return  isInStock;
     }
