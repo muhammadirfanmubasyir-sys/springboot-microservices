@@ -57,7 +57,7 @@ class ProductServiceApplicationTests {
         ProductRequest productRequest = this.getProductRequest();
         String productRequestString = objectMapper.writeValueAsString(productRequest);
 
-        mockMvc.perform(
+        mockMvc.perform(  //real time invoke!!
                           post("/api/product")
                                   .contentType(MediaType.APPLICATION_JSON)
                                   .content(productRequestString)
@@ -71,7 +71,7 @@ class ProductServiceApplicationTests {
     @Test
     @Order(2000)
     void shouldGetProduct() throws Exception {
-        mockMvc.perform(get("/api/product"))
+        mockMvc.perform(get("/api/product")) //real time invoke!!
                 .andExpect(status().isOk())
                 .andDo(print());
 
