@@ -18,13 +18,13 @@ public class InventoryServiceApplication {
     public CommandLineRunner loadData(InventoryRepository inventoryRepository) {
         return args -> {
             Inventory inventory = new Inventory();
-            inventory.setSkuCode("Iphone-50");
-            inventory.setQuantity(1);
+            inventory.setSkuCode("Iphone-73");
+            inventory.setQuantity(10);
             inventoryRepository.save(inventory);
 
             inventory = new Inventory();
-            inventory.setSkuCode("Iphone-50-promax");
-            inventory.setQuantity(2);
+            inventory.setSkuCode("Iphone-83");
+            inventory.setQuantity(0);
             inventoryRepository.save(inventory);
         };
     }

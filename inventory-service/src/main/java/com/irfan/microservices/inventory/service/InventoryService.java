@@ -1,10 +1,15 @@
 package com.irfan.microservices.inventory.service;
 
+import com.irfan.microservices.inventory.dto.InventoryResponse;
+import com.irfan.microservices.inventory.model.Inventory;
 import com.irfan.microservices.inventory.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -14,15 +19,28 @@ public class InventoryService {
     private final InventoryRepository inventoryRepository;
 
     @Transactional(readOnly = true)
-    public boolean isInStock(String skuCode) {
+    public boolean isInStockBySkuCode(String skuCode) {
         boolean isInStock = inventoryRepository.findBySkuCode(skuCode).isPresent();
         log.info(" STOCK PRODUCT [" + skuCode + "] IS " + isInStock );
         return  isInStock;
     }
 
-    public boolean isInStock(String skuCode, Integer quantity) {
+    public boolean isInStockBySkuCodeAndQty(String skuCode, Integer quantity) {
         boolean isInStock = inventoryRepository.findNativeWithSkuCodeAndQuantity(skuCode, quantity).isPresent();
         log.info(" STOCK PRODUCT [" + skuCode + "] AND QTY [" + quantity + "] IS " + isInStock );
         return  isInStock;
+    }
+
+    public List<InventoryResponse> getProductList(List<String> listOfSkuCode) {
+        List<InventoryResponse>  lisOfResponse = inventoryRepository.findBySkuCodeIn(listOfSkuCode)
+                .stream()
+                .map(inventory ->
+                    InventoryResponse.builder()
+                            .skuCode(inventory.getSkuCode())
+                            .inStock(inventory.getQuantity() > 0)
+                            .build()
+                ).toList();
+        log.info("getProductList() SIZE = "+ lisOfResponse.size());
+        return lisOfResponse;
     }
 }

@@ -24,14 +24,14 @@ public class InventoryControllerTest {
     private InventoryService inventoryService;
 
     @Test
-    public void testIsInStock() throws Exception {
+    public void testInStockBySkuCodeAndQty() throws Exception {
         String skuCode = "Iphone-99";
         int qty = 1000;
 
-       when(inventoryService.isInStock(skuCode, qty)).thenReturn(true);
+        when(inventoryService.isInStockBySkuCodeAndQty(skuCode, qty)).thenReturn(true);
 
         // Act & Assert
-        String url = "/api/inventory?skuCode="+skuCode+"&quantity="+qty;
+        String url = "/api/inventory/check-stock?skuCode="+skuCode+"&quantity="+qty;
         mockMvc.perform(MockMvcRequestBuilders.get(url)) //real time invoke!!
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"))

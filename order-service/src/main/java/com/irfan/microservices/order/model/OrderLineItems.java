@@ -19,6 +19,10 @@ public class OrderLineItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+ //   @ManyToOne(fetch = FetchType.LAZY)
+ //   @JoinColumn(name = "id")
+ //   private Order order;
+
     private String skuCode;
 
     private BigDecimal price;

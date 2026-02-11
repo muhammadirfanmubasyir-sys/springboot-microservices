@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -20,4 +21,5 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query(value = "SELECT * FROM inventory WHERE sku_code = :skuCode AND quantity >= :qty LIMIT 1", nativeQuery = true)
     Optional<Inventory> findNativeWithSkuCodeAndQuantity(@Param("skuCode") String skuCode, @Param("qty") Integer quantity);
 
+    List<Inventory> findBySkuCodeIn(List<String> listOfSkuCode);
 }
