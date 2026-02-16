@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class InventoryServiceTest {
         Integer qty = 1;
 
         Optional<Inventory> expectedInventory = Optional.of(new Inventory());
-        when(inventoryRepository.findNativeWithSkuCodeAndQuantity(skuCode, qty)).thenReturn(expectedInventory);
+        Mockito.when(inventoryRepository.findNativeWithSkuCodeAndQuantity(skuCode, qty)).thenReturn(expectedInventory);
 
         //Action!
         Optional<Inventory> actualInventory =  inventoryRepository

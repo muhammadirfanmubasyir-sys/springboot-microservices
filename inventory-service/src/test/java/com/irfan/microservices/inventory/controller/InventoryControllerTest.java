@@ -2,6 +2,7 @@ package com.irfan.microservices.inventory.controller;
 
 import com.irfan.microservices.inventory.service.InventoryService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -28,7 +29,7 @@ public class InventoryControllerTest {
         String skuCode = "Iphone-99";
         int qty = 1000;
 
-        when(inventoryService.isInStockBySkuCodeAndQty(skuCode, qty)).thenReturn(true);
+        Mockito.when(inventoryService.isInStockBySkuCodeAndQty(skuCode, qty)).thenReturn(true);
 
         // Act & Assert
         String url = "/api/inventory/check-stock?skuCode="+skuCode+"&quantity="+qty;
