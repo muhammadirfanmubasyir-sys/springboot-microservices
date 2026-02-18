@@ -26,7 +26,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final InventoryClient inventoryClient; //feign client
-    private final WebClient myWebClient;
+    private final WebClient.Builder myWebClientBuilder;
 
     public void placeOrder(OrderRequest orderRequest) throws Exception {
         ;
@@ -44,8 +44,8 @@ public class OrderService {
                 .map(OrderLineItems::getSkuCode)
                 .toList();
         //Call Inventory Service
-        InventoryResponse[] arrInventoryResponse = myWebClient.get()
-                .uri("http://localhost:8082/api/inventory",
+        InventoryResponse[] arrInventoryResponse = myWebClientBuilder.build().get()
+                .uri("http://inventory-service/api/inventory",
                         uriBuilder ->
                                 uriBuilder.queryParam("skuCode", skuCodes).build()
                 )

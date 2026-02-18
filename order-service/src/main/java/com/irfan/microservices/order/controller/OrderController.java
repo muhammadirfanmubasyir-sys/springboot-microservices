@@ -21,6 +21,7 @@ public class OrderController {
         try {
             orderService.placeOrder(orderRequest);
         } catch (Exception ex) {
+            ex.printStackTrace();
             log.info(ex.getMessage());
             throw new RuntimeException(ex.getMessage());
         }
