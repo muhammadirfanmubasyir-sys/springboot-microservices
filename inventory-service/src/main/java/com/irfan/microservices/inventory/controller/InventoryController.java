@@ -15,9 +15,9 @@ public class InventoryController {
 
     private final InventoryService inventoryService;
 
-    @GetMapping("/{sku-code}")
+    @GetMapping("/{my-code}")
     @ResponseStatus(HttpStatus.OK)
-    public boolean isInStockBySkuCode(@PathVariable("sku-code") String skuCode) {
+    public boolean isInStockBySkuCode(@PathVariable("my-code") String skuCode) {
         return inventoryService.isInStockBySkuCode(skuCode);
     }
 
@@ -27,6 +27,12 @@ public class InventoryController {
         return inventoryService.isInStockBySkuCodeAndQty(skuCode, quantity);
     }
 
+    /**
+     *  This is called by Order Service Application: /api/inventory?skuCode=xxx
+     *
+     * @param skuCode
+     * @return
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<InventoryResponse> retrieveProductList(@RequestParam List<String> skuCode) {

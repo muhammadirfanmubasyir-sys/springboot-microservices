@@ -28,7 +28,7 @@ public class OrderService {
     private final InventoryClient inventoryClient; //feign client
     private final WebClient.Builder myWebClientBuilder;
 
-    public void placeOrder(OrderRequest orderRequest) throws Exception {
+    public String placeOrder(OrderRequest orderRequest)  {
         ;
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
@@ -66,6 +66,7 @@ public class OrderService {
             throw new IllegalArgumentException("Product is not in stock, please try again later");
         }
 
+        return "Order places successfully";
 }
 
     private OrderLineItems mapTo(OrderLineItemsDto orderLineItemsDto) {

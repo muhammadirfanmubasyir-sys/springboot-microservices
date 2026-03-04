@@ -4,6 +4,7 @@ import com.irfan.microservices.inventory.dto.InventoryResponse;
 import com.irfan.microservices.inventory.model.Inventory;
 import com.irfan.microservices.inventory.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,12 @@ public class InventoryService {
         return  isInStock;
     }
 
-    public List<InventoryResponse> getProductList(List<String> listOfSkuCode) {
+    @Transactional(readOnly = true)
+  //  @SneakyThrows
+    public List<InventoryResponse> getProductList(List<String> listOfSkuCode)  {
+      //  log.info("WAIT STARTED..");
+       // Thread.sleep(10*1000);
+       // log.info("WAIT ENDED..");
         List<InventoryResponse>  lisOfResponse = inventoryRepository.findBySkuCodeIn(listOfSkuCode)
                 .stream()
                 .map(inventory ->
