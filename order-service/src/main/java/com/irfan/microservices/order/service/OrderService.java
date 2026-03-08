@@ -4,11 +4,13 @@ import com.irfan.microservices.order.client.InventoryClient;
 import com.irfan.microservices.order.dto.InventoryResponse;
 import com.irfan.microservices.order.dto.OrderLineItemsDto;
 import com.irfan.microservices.order.dto.OrderRequest;
+import com.irfan.microservices.order.event.OrderPlacedEvent;
 import com.irfan.microservices.order.model.Order;
 import com.irfan.microservices.order.model.OrderLineItems;
 import com.irfan.microservices.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,6 +29,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final InventoryClient inventoryClient; //feign client
     private final WebClient.Builder myWebClientBuilder;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public String placeOrder(OrderRequest orderRequest)  {
         ;
@@ -61,7 +64,9 @@ public class OrderService {
 
         if (allProductInStock) {
             order = orderRepository.save(order);
-            log.info("ORDER PLACED SUCCESSFULLY, ID = " + order.getId());
+            log.info("ORDER SAVED SUCCESSFULLY, ID = " + order.getId());
+            kafkaTemplate.send("NotificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
+            log.info("NOTIF SENT SUCCESSFULLY, ORDER NUMBER = " + order.getOrderNumber());
         } else {
             throw new IllegalArgumentException("Product is not in stock, please try again later");
         }

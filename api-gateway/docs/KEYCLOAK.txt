@@ -1,0 +1,8 @@
+KEYCLOAK DEFAULT PORT: 8080
+Client Authentication: ON
+Service Account Roles: ON
+============================
+2026-03-08 14:56:57,041 INFO  [io.quarkus] (main) Keycloak 26.5.4 on JVM (powered by Quarkus 3.27.2) started in 22.922s. Listening on: http://0.0.0.0:8080
+
+docker run -p 127.0.0.1:8181:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.5.4 start-dev
+
