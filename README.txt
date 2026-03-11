@@ -1,0 +1,1 @@
+mvn clean package jib:build -DskipTests=true  -Djib.to.auth.username="irfanmubasyir96" -Djib.to.auth.password="Mubasy!r78"
