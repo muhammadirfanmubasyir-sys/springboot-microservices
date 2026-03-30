@@ -1,24 +1,24 @@
 package com.irfan.microservices.product.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Document(value = "product")
-@AllArgsConstructor
+@Entity
+@Table(name="product")
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 public class Product {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String description;
     private BigDecimal price;
-
 }

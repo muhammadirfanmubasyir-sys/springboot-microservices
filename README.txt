@@ -17,3 +17,13 @@ config.json (c:\users\xxx\.docker)
   		"https://index.docker.io/v1/": {}
   	},
   }
+
+======
+NOTES
+======
+docker compose up -d
+docker compose up [SERVICE_NAME]
+
+java -jar my-app.jar --spring.profiles.active=prod,mq
+
+ALTER USER postgres WITH PASSWORD 'new_password';
