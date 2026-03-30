@@ -26,4 +26,38 @@ docker compose up [SERVICE_NAME]
 
 java -jar my-app.jar --spring.profiles.active=prod,mq
 
+================== postgres =====================
+
 ALTER USER postgres WITH PASSWORD 'new_password';
+
+C:\>psql -U admin -p 5431 -d order-service
+Password for user admin:
+order-service=# \dt
+                    List of tables
+ Schema |             Name             | Type  | Owner
+--------+------------------------------+-------+-------
+ public | order_line_items             | table | admin
+ public | orders                       | table | admin
+ public | orders_order_line_items_list | table | admin
+(3 rows)
+
+
+C:\>psql -U admin -p 5433 -d product-service
+Password for user admin:
+
+product-service=# \dt
+          List of tables
+ Schema |  Name   | Type  | Owner
+--------+---------+-------+-------
+ public | product | table | admin
+(1 row)
+
+
+C:\>psql -U admin -p 5434 -d inventory-service
+Password for user admin:
+
+inventory-service=# \dt
+           List of tables
+ Schema |   Name    | Type  | Owner
+--------+-----------+-------+-------
+ public | inventory | table | admin
