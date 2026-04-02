@@ -1,4 +1,4 @@
-package otel;
+package com.irfan.microservices.order;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender;

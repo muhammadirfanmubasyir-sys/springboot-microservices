@@ -32,7 +32,6 @@ public class OrderService {
     private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public String placeOrder(OrderRequest orderRequest)  {
-        ;
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
 
