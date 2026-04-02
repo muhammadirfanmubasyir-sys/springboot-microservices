@@ -5,6 +5,7 @@ import com.irfan.microservices.order.service.OrderService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,16 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
-    @TimeLimiter(name ="inventory")
-    @Retry(name = "inventory")
-    public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest) {
+//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
+//    @TimeLimiter(name ="inventory")
+//    @Retry(name = "inventory")
+ /*   public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest) {
         return CompletableFuture.supplyAsync(()-> orderService.placeOrder(orderRequest));
+    }*/
+    @Observed(name="order.count")
+    public String placeOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.placeOrder(orderRequest);
     }
-
     public CompletableFuture<String> fallbackMethod(OrderRequest request, RuntimeException ex) {
         return  CompletableFuture.supplyAsync(()-> "oops, something went wrong, please order again later!");
     }

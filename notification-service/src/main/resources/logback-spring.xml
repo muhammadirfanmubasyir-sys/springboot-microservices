@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="OTLP" class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <!-- Pattern to include trace and span IDs -->
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} trace_id=%X{traceId} span_id=%X{spanId} - %msg%n</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="OTLP" />
+        <appender-ref ref="CONSOLE" /> <!-- Keep console appender for local debugging -->
+    </root>
+</configuration>
+

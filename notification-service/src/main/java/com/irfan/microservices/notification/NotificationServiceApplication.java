@@ -1,5 +1,6 @@
 package com.irfan.microservices.notification;
 
+import io.micrometer.observation.annotation.Observed;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ public class NotificationServiceApplication {
     }
 
     @KafkaListener(topics = "NotificationTopic", groupId = "myGroup")
+    @Observed(name="message.count")
     public void handleNotificationTopic(OrderPlacedEvent orderPlacedEvent) {
          log.info("================================================================");
          log.info("Order Received with Number = {}", orderPlacedEvent.getOrderNumber());
