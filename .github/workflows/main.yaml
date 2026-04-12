@@ -1,0 +1,27 @@
+name: Rabbana
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  rabbana:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+            java-version: '21'
+            distribution: 'temurin'
+            cache: maven
+
+      - name: Build with Maven
+        run: mvn clean package jib:build -DskipTests=true  -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER_NAME }}  -Djib.to.auth.password=${{ secrets.DOCKER_HUB_USER_PWD }}
