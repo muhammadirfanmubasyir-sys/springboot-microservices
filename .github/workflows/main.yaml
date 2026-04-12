@@ -23,5 +23,5 @@ jobs:
             distribution: 'temurin'
             cache: maven
 
-      - name: Build with Maven
+      - name: Build with Maven and Deploy Docker Image to https://hub.docker.com/repositories/irfanmubasyir96
         run: mvn clean package jib:build -DskipTests=true  -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER_NAME }}  -Djib.to.auth.password=${{ secrets.DOCKER_HUB_USER_PWD }}
