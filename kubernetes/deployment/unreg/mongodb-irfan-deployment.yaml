@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ../../kompose99 convert
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: mongodb-irfan
+  name: mongodb-irfan
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mongodb-irfan
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ../../kompose99 convert
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: mongodb-irfan
+    spec:
+      containers:
+        - image: mongo:8.0
+          name: mongodb-irfan
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongodb-irfan-claim0
+      restartPolicy: Always
+      volumes:
+        - name: mongodb-irfan-claim0
+          persistentVolumeClaim:
+            claimName: mongodb-irfan-claim0

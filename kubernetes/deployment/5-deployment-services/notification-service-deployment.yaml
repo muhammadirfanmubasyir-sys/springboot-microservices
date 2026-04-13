@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ../kompose99 convert
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: notification-service
+  name: notification-service
+  namespace: demo-ns
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: notification-service
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ../kompose99 convert
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: notification-service
+    spec:
+      containers:
+        - env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+            - name: EUREKA.CLIENT.SERVICE-URL.DEFAULTZONE
+              value: http://discovery-server.demo-ns.svc.cluster.local:8762/eureka
+            - name: MANAGEMENT.OTLP.METRICS.EXPORT.URL
+              value: http://grafana-lgtm.demo-ns.svc.cluster.local:4318/v1/metrics
+            - name: MANAGEMENT.OPENTELEMETRY.TRACING.EXPORT.OTLP.ENDPOINT
+              value: http://grafana-lgtm.demo-ns.svc.cluster.local:4318/v1/traces
+            - name: MANAGEMENT.OPENTELEMETRY.LOGGING.EXPORT.OTLP.ENDPOINT
+              value: http://grafana-lgtm.demo-ns.svc.cluster.local:4318/v1/logs
+            - name: SPRING.KAFKA.BOOTSTRAP-SERVERS
+              value: broker.demo-ns.svc.cluster.local:29092
+          image: irfanmubasyir96/notification-service:latest
+          name: notification-service
+      restartPolicy: Always

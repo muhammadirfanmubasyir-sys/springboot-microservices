@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ../../kompose99 convert
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: postgres-product
+  name: postgres-product
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: postgres-product
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ../../kompose99 convert
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: postgres-product
+    spec:
+      containers:
+        - args:
+            - -p
+            - "5433"
+          env:
+            - name: PG_DATA
+              value: /data/postgres
+            - name: POSTGRES_DB
+              value: product-service
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: POSTGRES_USER
+              value: admin
+          image: postgres
+          name: postgres-product
+          ports:
+            - containerPort: 5433
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/postgres
+              name: postgres-product-claim0
+      restartPolicy: Always
+      volumes:
+        - name: postgres-product-claim0
+          persistentVolumeClaim:
+            claimName: postgres-product-claim0

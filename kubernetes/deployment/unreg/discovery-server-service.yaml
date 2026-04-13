@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: ../../kompose99 convert
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: discovery-server
+  name: discovery-server
+spec:
+  ports:
+    - name: "8762"
+      port: 8762
+      targetPort: 8762
+  selector:
+    io.kompose.service: discovery-server
