@@ -204,7 +204,7 @@ keycloak-claim0         Bound    pvc-65bdc139-bf8a-467f-9c21-0cac63057f52   100M
 keycloak-mysql-claim0   Bound    pvc-14fa8f97-d4c5-4e4d-81d8-f2f2bd65b49e   100Mi      RWO            standard       <unset>                 74m
 postgres-order-claim0   Bound    pvc-2147c73a-0a18-491a-a181-e6d5d4534cbb   100Mi      RWO            standard       <unset>                 63m
 
-
+$ kubectl get all -n demo-ns
 
 
 
