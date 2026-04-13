@@ -28,7 +28,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: docker
             - name: SPRING.SECURITY.OAUTH2.RESOURCESERVER.JWT.ISSUER-URI
-              value: http://keycloak.demo-ns.svc.cluster.local:8080/realms/spring-boot-micro-services-realm
+              value: http://keycloak:8080/realms/spring-boot-micro-services-realm
             - name: EUREKA.CLIENT.SERVICE-URL.DEFAULTZONE
               value: http://discovery-server.demo-ns.svc.cluster.local:8762/eureka
             - name: MANAGEMENT.OTLP.METRICS.EXPORT.URL
