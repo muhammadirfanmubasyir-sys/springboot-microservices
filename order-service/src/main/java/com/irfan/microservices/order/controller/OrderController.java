@@ -23,17 +23,42 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
+//  case 1
+//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_1")
+
+//  case 2 : Circuit breaker with timeout
+//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
 //    @TimeLimiter(name ="inventory")
+//    Resilience4j Timeout properties => for slow behaviour in Inventory Service
+//    props: resilience4j.timelimiter.instances.inventory.timeout-duration=3s
+
+//  case 3: Circuit breaker with retry first then timeout
+//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
 //    @Retry(name = "inventory")
- /*   public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest) {
-        return CompletableFuture.supplyAsync(()-> orderService.placeOrder(orderRequest));
-    }*/
+//    @TimeLimiter(name ="inventory")
+//    props: #Resilience4j Retry properties
+//    resilience4j.retry.instances.inventory.max-attempts=3
+//    resilience4j.retry.instances.inventory.wait-duration=5s
+
     @Observed(name="order.count")
+    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_1")
     public String placeOrder(@RequestBody OrderRequest orderRequest) {
         return orderService.placeOrder(orderRequest);
     }
-    public CompletableFuture<String> fallbackMethod(OrderRequest request, RuntimeException ex) {
-        return  CompletableFuture.supplyAsync(()-> "oops, something went wrong, please order again later!");
+
+    public String fallbackMethod_1(OrderRequest request, RuntimeException ex) {
+        return "oops, something went wrong, please order again later!";
     }
+
+    //  for case 2 and 3 : timeout and retry with timeout
+    //  @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
+    //  @TimeLimiter(name ="inventory")
+    //  @Retry(name = "inventory")
+    //  public CompletableFuture<String> placeOrder (@RequestBody OrderRequest orderRequest) {
+    //       return CompletableFuture.supplyAsync(()-> orderService.placeOrder(orderRequest));
+    //  }
+
+    //  public CompletableFuture<String> fallbackMethod_2(OrderRequest request, RuntimeException ex) {
+    //    return  CompletableFuture.supplyAsync(()-> "oops, something went wrong, please order again later!");
+    //  }
 }
