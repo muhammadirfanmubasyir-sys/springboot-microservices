@@ -39,6 +39,8 @@ public class OrderController {
 //    props: #Resilience4j Retry properties
 //    resilience4j.retry.instances.inventory.max-attempts=3
 //    resilience4j.retry.instances.inventory.wait-duration=5s
+//    props: #Resilience4j Timeout properties => for slow behaviour in Inventory Service
+//    resilience4j.timelimiter.instances.inventory.timeout-duration=3s
 
     @Observed(name="order.count")
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_1")
@@ -57,7 +59,6 @@ public class OrderController {
     //  public CompletableFuture<String> placeOrder (@RequestBody OrderRequest orderRequest) {
     //       return CompletableFuture.supplyAsync(()-> orderService.placeOrder(orderRequest));
     //  }
-
     //  public CompletableFuture<String> fallbackMethod_2(OrderRequest request, RuntimeException ex) {
     //    return  CompletableFuture.supplyAsync(()-> "oops, something went wrong, please order again later!");
     //  }
