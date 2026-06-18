@@ -3,6 +3,7 @@ package com.irfan.microservices.order.controller;
 import com.irfan.microservices.order.dto.OrderRequest;
 import com.irfan.microservices.order.service.OrderService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.micrometer.observation.annotation.Observed;
@@ -36,23 +37,36 @@ public class OrderController {
 //    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
 //    @Retry(name = "inventory")
 //    @TimeLimiter(name ="inventory")
+
 //    props: #Resilience4j Retry properties
 //    resilience4j.retry.instances.inventory.max-attempts=3
 //    resilience4j.retry.instances.inventory.wait-duration=5s
+
 //    props: #Resilience4j Timeout properties => for slow behaviour in Inventory Service
 //    resilience4j.timelimiter.instances.inventory.timeout-duration=3s
 
     @Observed(name="order.count")
-    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_1")
+    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_CB")
+    @RateLimiter(name="inventory", fallbackMethod = "fallbackMethod_RL")
     public String placeOrder(@RequestBody OrderRequest orderRequest) {
         return orderService.placeOrder(orderRequest);
     }
 
-    public String fallbackMethod_1(OrderRequest request, RuntimeException ex) {
+    public String fallbackMethod_CB(OrderRequest request, RuntimeException ex) {
         return "oops, something went wrong, please order again later!";
     }
 
-    //  for case 2 and 3 : timeout and retry with timeout
+    /**
+     * resilience4j.ratelimiter.instances.inventory.limitForPeriod = 10
+     * resilience4j.ratelimiter.instances.inventory.limitRefreshPeriod = 10s
+     * resilience4j.ratelimiter.instances.inventory.timeoutDuration = 3s
+     *
+     */
+    public String fallbackMethod_RL(OrderRequest request, RuntimeException ex) {
+        return "You already reached  10 requests within 10 s, next wait for 3s";
+    }
+
+    //  for case 2 and 3 : CB with timeout and CB with retry then timeout
     //  @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
     //  @TimeLimiter(name ="inventory")
     //  @Retry(name = "inventory")
