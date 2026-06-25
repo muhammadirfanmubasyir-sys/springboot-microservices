@@ -1,6 +1,7 @@
 package com.irfan.microservices.inventory.controller;
 
 import com.irfan.microservices.inventory.service.InventoryService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,6 +25,7 @@ public class InventoryControllerTest {
     private InventoryService inventoryService;
 
     @Test
+    @DisplayName("Test In Stock By SkuCode And Qty")
     public void testInStockBySkuCodeAndQty() throws Exception {
         String skuCode = "Iphone-99";
         int qty = 1000;
