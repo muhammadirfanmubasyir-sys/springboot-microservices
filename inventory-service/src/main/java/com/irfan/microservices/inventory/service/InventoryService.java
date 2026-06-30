@@ -4,13 +4,12 @@ import com.irfan.microservices.inventory.dto.InventoryResponse;
 import com.irfan.microservices.inventory.model.Inventory;
 import com.irfan.microservices.inventory.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -22,23 +21,19 @@ public class InventoryService {
     @Transactional(readOnly = true)
     public boolean isInStockBySkuCode(String skuCode) {
         boolean isInStock = inventoryRepository.findBySkuCode(skuCode).isPresent();
-        log.info(" STOCK PRODUCT [" + skuCode + "] IS " + isInStock );
-        return  isInStock;
+        log.info("STOCK PRODUCT [{}] IS {}", skuCode, isInStock);
+        return isInStock;
     }
 
     public boolean isInStockBySkuCodeAndQty(String skuCode, Integer quantity) {
         boolean isInStock = inventoryRepository.findNativeWithSkuCodeAndQuantity(skuCode, quantity).isPresent();
-        log.info(" STOCK PRODUCT [" + skuCode + "] AND QTY [" + quantity + "] IS " + isInStock );
-        return  isInStock;
+        log.info("STOCK PRODUCT [{}] AND QTY [{}] IS {}", skuCode, quantity, isInStock);
+        return isInStock;
     }
 
     @Transactional(readOnly = true)
-  //  @SneakyThrows
-    public List<InventoryResponse> getProductList(List<String> listOfSkuCode)  {
-      //  log.info("WAIT STARTED..");
-       // Thread.sleep(10*1000);
-       // log.info("WAIT ENDED..");
-        List<InventoryResponse>  lisOfResponse = inventoryRepository.findBySkuCodeIn(listOfSkuCode)
+    public List<InventoryResponse> getProductList(List<String> listOfSkuCode) {
+        List<InventoryResponse> listOfResponse = inventoryRepository.findBySkuCodeIn(listOfSkuCode)
                 .stream()
                 .map(inventory ->
                     InventoryResponse.builder()
@@ -46,7 +41,46 @@ public class InventoryService {
                             .inStock(inventory.getQuantity() > 0)
                             .build()
                 ).toList();
-        log.info("getProductList() SIZE = "+ lisOfResponse.size());
-        return lisOfResponse;
+        log.info("getProductList() SIZE = {}", listOfResponse.size());
+        return listOfResponse;
+    }
+
+    @Transactional
+    public List<String> reserveStock(String orderNumber, List<String> skuCodes) {
+        log.info("Reserving stock for order: {}, SKUs: {}", orderNumber, skuCodes);
+        List<String> reservedSkuCodes = new ArrayList<>();
+
+        for (String skuCode : skuCodes) {
+            Inventory inventory = inventoryRepository.findBySkuCode(skuCode)
+                    .orElse(null);
+
+            if (inventory != null && inventory.getQuantity() > 0) {
+                inventory.setQuantity(inventory.getQuantity() - 1);
+                inventoryRepository.save(inventory);
+                reservedSkuCodes.add(skuCode);
+                log.info("Reserved stock for SKU: {}, remaining quantity: {}", skuCode, inventory.getQuantity());
+            } else {
+                log.warn("Cannot reserve stock for SKU: {} - insufficient quantity", skuCode);
+                throw new IllegalArgumentException("Insufficient stock for SKU: " + skuCode);
+            }
+        }
+
+        log.info("Stock reserved successfully for order: {}, reserved SKUs: {}", orderNumber, reservedSkuCodes);
+        return reservedSkuCodes;
+    }
+
+    @Transactional
+    public void releaseStock(String orderNumber, List<String> skuCodes) {
+        log.info("Releasing stock for order: {}, SKUs: {}", orderNumber, skuCodes);
+
+        for (String skuCode : skuCodes) {
+            inventoryRepository.findBySkuCode(skuCode).ifPresent(inventory -> {
+                inventory.setQuantity(inventory.getQuantity() + 1);
+                inventoryRepository.save(inventory);
+                log.info("Released stock for SKU: {}, new quantity: {}", skuCode, inventory.getQuantity());
+            });
+        }
+
+        log.info("Stock released successfully for order: {}", orderNumber);
     }
 }

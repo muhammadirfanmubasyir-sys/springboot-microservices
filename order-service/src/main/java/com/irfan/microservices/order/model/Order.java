@@ -21,6 +21,9 @@ public class Order {
 
     private String orderNumber;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLineItems> orderLineItemsList;
 

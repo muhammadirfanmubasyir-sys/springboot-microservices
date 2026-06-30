@@ -9,15 +9,24 @@ import org.springframework.kafka.annotation.KafkaListener;
 @SpringBootApplication
 @Slf4j
 public class NotificationServiceApplication {
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(NotificationServiceApplication.class, args);
     }
 
-    @KafkaListener(topics = "NotificationTopic", groupId = "myGroup")
-    @Observed(name="message.count")
-    public void handleNotificationTopic(OrderPlacedEvent orderPlacedEvent) {
-         log.info("================================================================");
-         log.info("Order Received with Number = {}", orderPlacedEvent.getOrderNumber());
-         log.info("================================================================");
+    @KafkaListener(topics = "OrderCompletedTopic", groupId = "notification-group")
+    @Observed(name = "message.count")
+    public void handleOrderCompleted(OrderCompletedEvent event) {
+        log.info("================================================================");
+        log.info("ORDER COMPLETED - Order Number: {}", event.getOrderNumber());
+        log.info("================================================================");
+    }
+
+    @KafkaListener(topics = "OrderCancelledTopic", groupId = "notification-group")
+    @Observed(name = "message.count")
+    public void handleOrderCancelled(OrderCancelledEvent event) {
+        log.info("================================================================");
+        log.info("ORDER CANCELLED - Order Number: {}, Reason: {}",
+                event.getOrderNumber(), event.getReason());
+        log.info("================================================================");
     }
 }

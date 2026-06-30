@@ -1,18 +1,14 @@
 package com.irfan.microservices.order.controller;
 
 import com.irfan.microservices.order.dto.OrderRequest;
-import com.irfan.microservices.order.service.OrderService;
+import com.irfan.microservices.order.service.OrchestratorService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/order")
@@ -20,60 +16,22 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrchestratorService orchestratorService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-//  case 1
-//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_1")
-
-//  case 2 : Circuit breaker with timeout
-//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
-//    @TimeLimiter(name ="inventory")
-//    Resilience4j Timeout properties => for slow behaviour in Inventory Service
-//    props: resilience4j.timelimiter.instances.inventory.timeout-duration=3s
-
-//  case 3: Circuit breaker with retry first then timeout
-//    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
-//    @Retry(name = "inventory")
-//    @TimeLimiter(name ="inventory")
-
-//    props: #Resilience4j Retry properties
-//    resilience4j.retry.instances.inventory.max-attempts=3
-//    resilience4j.retry.instances.inventory.wait-duration=5s
-
-//    props: #Resilience4j Timeout properties => for slow behaviour in Inventory Service
-//    resilience4j.timelimiter.instances.inventory.timeout-duration=3s
-
     @Observed(name="order.count")
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_CB")
     @RateLimiter(name="inventory", fallbackMethod = "fallbackMethod_RL")
     public String placeOrder(@RequestBody OrderRequest orderRequest) {
-        return orderService.placeOrder(orderRequest);
+        return orchestratorService.startSaga(orderRequest);
     }
 
     public String fallbackMethod_CB(OrderRequest request, RuntimeException ex) {
         return "oops, something went wrong, please order again later!";
     }
 
-    /**
-     * resilience4j.ratelimiter.instances.inventory.limitForPeriod = 10
-     * resilience4j.ratelimiter.instances.inventory.limitRefreshPeriod = 10s
-     * resilience4j.ratelimiter.instances.inventory.timeoutDuration = 3s
-     *
-     */
     public String fallbackMethod_RL(OrderRequest request, RuntimeException ex) {
-        return "You already reached  10 requests within 10 s, next wait for 3s";
+        return "You already reached 10 requests within 10 s, next wait for 3s";
     }
-
-    //  for case 2 and 3 : CB with timeout and CB with retry then timeout
-    //  @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_2")
-    //  @TimeLimiter(name ="inventory")
-    //  @Retry(name = "inventory")
-    //  public CompletableFuture<String> placeOrder (@RequestBody OrderRequest orderRequest) {
-    //       return CompletableFuture.supplyAsync(()-> orderService.placeOrder(orderRequest));
-    //  }
-    //  public CompletableFuture<String> fallbackMethod_2(OrderRequest request, RuntimeException ex) {
-    //    return  CompletableFuture.supplyAsync(()-> "oops, something went wrong, please order again later!");
-    //  }
 }

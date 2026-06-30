@@ -48,20 +48,17 @@ public class InventoryServiceTest {
     @Test
     @DisplayName("Test Find Native With SkuCode And Quantity")
     public void testFindNativeWithSkuCodeAndQuantity() {
-        String skuCode ="Iphone-50";
+        String skuCode = "Iphone-50";
         Integer qty = 1;
 
         Optional<Inventory> expectedInventory = Optional.of(new Inventory());
         Mockito.when(inventoryRepository.findNativeWithSkuCodeAndQuantity(skuCode, qty)).thenReturn(expectedInventory);
 
-        //Action!
-        Optional<Inventory> actualInventory =  inventoryRepository
+        Optional<Inventory> actualInventory = inventoryRepository
                 .findNativeWithSkuCodeAndQuantity(skuCode, qty);
 
-        //Assert
         Assertions.assertEquals(expectedInventory, actualInventory);
 
-        //Verify that repository method was called
         verify(inventoryRepository).findNativeWithSkuCodeAndQuantity(skuCode, qty);
     }
 
@@ -171,7 +168,7 @@ public class InventoryServiceTest {
     @DisplayName("Should handle quantity equal to zero as out of stock")
     public void testZeroQuantityIsOutOfStock() {
         testInventory.setQuantity(0);
-        
+
         List<String> skuCodes = Collections.singletonList(testSkuCode);
         when(inventoryRepository.findBySkuCodeIn(skuCodes))
                 .thenReturn(Collections.singletonList(testInventory));
@@ -206,5 +203,44 @@ public class InventoryServiceTest {
 
         verify(inventoryRepository).findBySkuCode(testSkuCode);
         verify(inventoryRepository).findNativeWithSkuCodeAndQuantity(testSkuCode, 50);
+    }
+
+    @Test
+    @DisplayName("Should reserve stock successfully")
+    public void testReserveStockSuccess() {
+        when(inventoryRepository.findBySkuCode(testSkuCode))
+                .thenReturn(Optional.of(testInventory));
+
+        List<String> reservedSkuCodes = inventoryService.reserveStock("ORDER-12345", List.of(testSkuCode));
+
+        assertNotNull(reservedSkuCodes);
+        assertEquals(1, reservedSkuCodes.size());
+        assertEquals(testSkuCode, reservedSkuCodes.get(0));
+        assertEquals(99, testInventory.getQuantity());
+        verify(inventoryRepository).save(testInventory);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when reserving stock for out of stock item")
+    public void testReserveStockOutOfStock() {
+        testInventory.setQuantity(0);
+        when(inventoryRepository.findBySkuCode(testSkuCode))
+                .thenReturn(Optional.of(testInventory));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                inventoryService.reserveStock("ORDER-12345", List.of(testSkuCode)));
+    }
+
+    @Test
+    @DisplayName("Should release stock successfully")
+    public void testReleaseStockSuccess() {
+        testInventory.setQuantity(99);
+        when(inventoryRepository.findBySkuCode(testSkuCode))
+                .thenReturn(Optional.of(testInventory));
+
+        inventoryService.releaseStock("ORDER-12345", List.of(testSkuCode));
+
+        assertEquals(100, testInventory.getQuantity());
+        verify(inventoryRepository).save(testInventory);
     }
 }
