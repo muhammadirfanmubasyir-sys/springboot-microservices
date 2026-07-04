@@ -7,14 +7,13 @@ import com.irfan.microservices.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -25,29 +24,31 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@DisplayName("Product Controller Integration Tests")
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Product Controller Unit Tests")
 public class ProductControllerTest {
-    @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockitoBean
-    private ProductService productService;
 
     private MockMvc mockMvc;
 
+    @Mock
+    private ProductService productService;
+
+    @InjectMocks
+    private ProductController productController;
+
+    private ObjectMapper objectMapper;
     private ProductRequest productRequest;
     private ProductResponse productResponse;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+        objectMapper = new ObjectMapper();
 
         productRequest = ProductRequest.builder()
                 .name("Laptop")
@@ -71,7 +72,7 @@ public class ProductControllerTest {
 
         String jsonRequest = objectMapper.writeValueAsString(productRequest);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
+        mockMvc.perform(post("/api/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
@@ -98,7 +99,7 @@ public class ProductControllerTest {
 
         when(productService.getAllProducts()).thenReturn(responses);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
+        mockMvc.perform(get("/api/product"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is("Laptop")))
@@ -115,7 +116,7 @@ public class ProductControllerTest {
     void testGetAllProductsEmpty() throws Exception {
         when(productService.getAllProducts()).thenReturn(Collections.emptyList());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
+        mockMvc.perform(get("/api/product"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)))
                 .andDo(print());
@@ -131,7 +132,7 @@ public class ProductControllerTest {
 
         String jsonRequest = objectMapper.writeValueAsString(productRequest);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
+        mockMvc.perform(post("/api/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
@@ -144,7 +145,7 @@ public class ProductControllerTest {
     void testGetProductsHttpStatus() throws Exception {
         when(productService.getAllProducts()).thenReturn(Collections.singletonList(productResponse));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
+        mockMvc.perform(get("/api/product"))
                 .andExpect(status().isOk());
     }
 
@@ -171,12 +172,12 @@ public class ProductControllerTest {
                         .build()
         );
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
+        mockMvc.perform(post("/api/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest1))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
+        mockMvc.perform(post("/api/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest2))
                 .andExpect(status().isCreated());
@@ -190,7 +191,7 @@ public class ProductControllerTest {
 
         String jsonRequest = objectMapper.writeValueAsString(productRequest);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
+        mockMvc.perform(post("/api/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
@@ -216,7 +217,7 @@ public class ProductControllerTest {
 
         String jsonRequest = objectMapper.writeValueAsString(productRequest);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
+        mockMvc.perform(post("/api/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
@@ -238,7 +239,7 @@ public class ProductControllerTest {
 
         when(productService.getAllProducts()).thenReturn(responses);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
+        mockMvc.perform(get("/api/product"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].price", is(10.0)))
@@ -253,7 +254,7 @@ public class ProductControllerTest {
         when(productService.getAllProducts())
                 .thenReturn(Collections.singletonList(productResponse));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
+        mockMvc.perform(get("/api/product"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].name", is("Laptop")))
@@ -265,7 +266,7 @@ public class ProductControllerTest {
     void testResponseContentType() throws Exception {
         when(productService.getAllProducts()).thenReturn(Collections.singletonList(productResponse));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
+        mockMvc.perform(get("/api/product"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());

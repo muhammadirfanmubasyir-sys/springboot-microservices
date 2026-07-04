@@ -37,3 +37,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/.github/
+/.idea/
+/grafana/
+/mongo-data/
+/mysql_keycloak_data/
