@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Coverage Report - Microservices Project</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; padding: 20px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { text-align: center; margin-bottom: 5px; color: #1a1a2e; font-size: 28px; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px; }
+  .summary-card { background: #fff; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .summary-card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .summary-card .value { font-size: 32px; font-weight: 700; }
+  .summary-card .detail { font-size: 12px; color: #999; margin-top: 5px; }
+  .green { color: #27ae60; }
+  .yellow { color: #f39c12; }
+  .red { color: #e74c3c; }
+  .blue { color: #2980b9; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px; }
+  thead { background: #1a1a2e; color: #fff; }
+  th { padding: 14px 16px; text-align: left; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 12px 16px; border-bottom: 1px solid #eee; font-size: 14px; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #f8f9fa; }
+  .bar-cell { width: 200px; }
+  .bar-bg { background: #e9ecef; border-radius: 4px; height: 20px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .bar-fill.high { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+  .bar-fill.medium { background: linear-gradient(90deg, #f39c12, #f1c40f); }
+  .bar-fill.low { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+  .pct { font-weight: 600; }
+  .pct-high { color: #27ae60; }
+  .pct-medium { color: #f39c12; }
+  .pct-low { color: #e74c3c; }
+  .test-summary { background: #fff; border-radius: 10px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 30px; }
+  .test-summary h2 { margin-bottom: 15px; color: #1a1a2e; font-size: 20px; }
+  .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+  .test-card { background: #f8f9fa; border-radius: 8px; padding: 15px; text-align: center; }
+  .test-card .service-name { font-weight: 600; color: #1a1a2e; margin-bottom: 8px; }
+  .test-card .test-count { font-size: 24px; font-weight: 700; color: #27ae60; }
+  .test-card .test-label { font-size: 12px; color: #888; }
+  .status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .status-pass { background: #d4edda; color: #155724; }
+  .status-fail { background: #f8d7da; color: #721c24; }
+  .footer { text-align: center; color: #999; font-size: 12px; margin-top: 20px; padding: 15px; }
+  .module-links { margin-bottom: 30px; background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .module-links h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 18px; }
+  .module-links ul { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+  .module-links a { display: inline-block; padding: 8px 16px; background: #1a1a2e; color: #fff; border-radius: 6px; text-decoration: none; font-size: 13px; transition: background 0.2s; }
+  .module-links a:hover { background: #16213e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Code Coverage Report</h1>
+  <p class="subtitle">springboot-irfan-mubasyir &mdash; Generated: July 5, 2026</p>
+
+  <!-- Overall Summary -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Instruction Coverage</div>
+      <div class="value green">97%</div>
+      <div class="detail">34 of 1,045 missed</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Branch Coverage</div>
+      <div class="value green">89%</div>
+      <div class="detail">2 of 18 missed</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Line Coverage</div>
+      <div class="value green">97%</div>
+      <div class="detail">9 of 283 missed</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Method Coverage</div>
+      <div class="value green">92%</div>
+      <div class="detail">6 of 74 missed</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Class Coverage</div>
+      <div class="value green">95%</div>
+      <div class="detail">1 of 22 missed</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Total Tests</div>
+      <div class="value blue">87</div>
+      <div class="detail">0 failures</div>
+    </div>
+  </div>
+
+  <!-- Test Results -->
+  <div class="test-summary">
+    <h2>Test Execution Results</h2>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="service-name">product-service</div>
+        <div class="test-count">16</div>
+        <div class="test-label">Tests Passed</div>
+      </div>
+      <div class="test-card">
+        <div class="service-name">order-service</div>
+        <div class="test-count">15</div>
+        <div class="test-label">Tests Passed</div>
+      </div>
+      <div class="test-card">
+        <div class="service-name">inventory-service</div>
+        <div class="test-count">43</div>
+        <div class="test-label">Tests Passed</div>
+      </div>
+      <div class="test-card">
+        <div class="service-name">notification-service</div>
+        <div class="test-count">11</div>
+        <div class="test-label">Tests Passed</div>
+      </div>
+      <div class="test-card">
+        <div class="service-name">api-gateway</div>
+        <div class="test-count">16</div>
+        <div class="test-label">Tests Passed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Per-Module Coverage -->
+  <table>
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>Instructions</th>
+        <th>Branches</th>
+        <th>Lines</th>
+        <th>Methods</th>
+        <th>Classes</th>
+        <th>Complexity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>product-service</strong></td>
+        <td class="bar-cell">
+          <span class="pct pct-high">96%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:96%"></div></div>
+          <small style="color:#999">5 / 126 missed</small>
+        </td>
+        <td>
+          <span class="pct" style="color:#999">n/a</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 0 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">94%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:94%"></div></div>
+          <small style="color:#999">2 / 33 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">92%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:92%"></div></div>
+          <small style="color:#999">1 / 12 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 6 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">92%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:92%"></div></div>
+          <small style="color:#999">1 / 12 missed</small>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>order-service</strong></td>
+        <td class="bar-cell">
+          <span class="pct pct-high">95%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:95%"></div></div>
+          <small style="color:#999">24 / 482 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">87%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:87%"></div></div>
+          <small style="color:#999">1 / 8 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">96%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:96%"></div></div>
+          <small style="color:#999">5 / 138 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">88%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:88%"></div></div>
+          <small style="color:#999">4 / 33 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">88%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:88%"></div></div>
+          <small style="color:#999">1 / 8 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">86%</span>
+          <div class="bar-bg"><div class="bar-fill medium" style="width:86%"></div></div>
+          <small style="color:#999">5 / 37 missed</small>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>inventory-service</strong></td>
+        <td class="bar-cell">
+          <span class="pct pct-high">99%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:99%"></div></div>
+          <small style="color:#999">5 / 417 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">90%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:90%"></div></div>
+          <small style="color:#999">1 / 10 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">98%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:98%"></div></div>
+          <small style="color:#999">2 / 102 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">96%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:96%"></div></div>
+          <small style="color:#999">1 / 25 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 6 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">93%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:93%"></div></div>
+          <small style="color:#999">2 / 30 missed</small>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>notification-service</strong></td>
+        <td class="bar-cell">
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 10 missed</small>
+        </td>
+        <td>
+          <span class="pct" style="color:#999">n/a</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 0 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 5 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 2 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 1 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 2 missed</small>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>api-gateway</strong></td>
+        <td class="bar-cell">
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 10 missed</small>
+        </td>
+        <td>
+          <span class="pct" style="color:#999">n/a</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 0 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 5 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 2 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 1 missed</small>
+        </td>
+        <td>
+          <span class="pct pct-high">100%</span>
+          <div class="bar-bg"><div class="bar-fill high" style="width:100%"></div></div>
+          <small style="color:#999">0 / 2 missed</small>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Individual Module Report Links -->
+  <div class="module-links">
+    <h2>Detailed Module Reports (JaCoCo HTML)</h2>
+    <ul>
+      <li><a href="product-service/index.html">product-service</a></li>
+      <li><a href="order-service/index.html">order-service</a></li>
+      <li><a href="inventory-service/index.html">inventory-service</a></li>
+      <li><a href="notification-service/index.html">notification-service</a></li>
+      <li><a href="api-gateway/index.html">api-gateway</a></li>
+    </ul>
+  </div>
+
+  <!-- Build Info -->
+  <div class="test-summary">
+    <h2>Build Information</h2>
+    <table>
+      <tr><td><strong>Java Version</strong></td><td>21</td></tr>
+      <tr><td><strong>Spring Boot</strong></td><td>4.0.1</td></tr>
+      <tr><td><strong>Maven Build</strong></td><td>mvn clean test jacoco:report</td></tr>
+      <tr><td><strong>JaCoCo Version</strong></td><td>0.8.15</td></tr>
+      <tr><td><strong>Coverage Threshold</strong></td><td>Line: 90% | Complexity: 85%</td></tr>
+      <tr><td><strong>Modules Tested</strong></td><td>5 of 6 (discovery-server has no tests)</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>Generated by JaCoCo Maven Plugin &mdash; All tests passed (0 failures, 0 errors)</p>
+  </div>
+</div>
+</body>
+</html>

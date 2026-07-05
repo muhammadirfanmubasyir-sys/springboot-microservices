@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">order-service</a> &gt; <a href="index.source.html" class="el_package">com.irfan.microservices.order.service</a> &gt; <span class="el_source">OrderService.java</span></div><h1>OrderService.java</h1><pre class="source lang-java linenums">package com.irfan.microservices.order.service;
+
+import com.irfan.microservices.order.client.InventoryClient;
+import com.irfan.microservices.order.dto.InventoryResponse;
+import com.irfan.microservices.order.dto.OrderLineItemsDto;
+import com.irfan.microservices.order.dto.OrderRequest;
+import com.irfan.microservices.order.event.OrderPlacedEvent;
+import com.irfan.microservices.order.model.Order;
+import com.irfan.microservices.order.model.OrderLineItems;
+import com.irfan.microservices.order.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+<span class="fc" id="L25">@Slf4j</span>
+@Transactional
+public class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final InventoryClient inventoryClient; //feign client
+    private final WebClient.Builder myWebClientBuilder;
+    private final KafkaTemplate&lt;String, OrderPlacedEvent&gt; kafkaTemplate;
+
+    public String placeOrder(OrderRequest orderRequest)  {
+<span class="fc" id="L35">        Order order = new Order();</span>
+<span class="fc" id="L36">        order.setOrderNumber(UUID.randomUUID().toString());</span>
+
+<span class="fc" id="L38">        List&lt;OrderLineItems&gt; orderLineItems = orderRequest.getOrderLineItemsDtoList()</span>
+<span class="fc" id="L39">                .stream()</span>
+<span class="fc" id="L40">                .map(this::mapTo)</span>
+                //.filter(OrderLineItems -&gt; (OrderLineItems.getQuantity() != -1))
+<span class="fc" id="L42">                .toList();</span>
+<span class="fc" id="L43">        order.setOrderLineItemsList(orderLineItems);</span>
+
+<span class="fc" id="L45">        List&lt;String&gt; skuCodes = order.getOrderLineItemsList().stream()</span>
+<span class="fc" id="L46">                .map(OrderLineItems::getSkuCode)</span>
+<span class="fc" id="L47">                .toList();</span>
+        //Call Inventory Service
+<span class="fc" id="L49">        InventoryResponse[] arrInventoryResponse = myWebClientBuilder.build().get()</span>
+<span class="fc" id="L50">                .uri(&quot;http://inventory-service/api/inventory&quot;,</span>
+                        uriBuilder -&gt;
+<span class="nc" id="L52">                                uriBuilder.queryParam(&quot;skuCode&quot;, skuCodes).build()</span>
+                )
+<span class="fc" id="L54">                .retrieve()</span>
+<span class="fc" id="L55">                .bodyToMono(InventoryResponse[].class)</span>
+<span class="fc" id="L56">                .block();</span>
+
+<span class="fc" id="L58">        boolean allProductInStock = false;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (arrInventoryResponse != null) {</span>
+<span class="fc" id="L60">            allProductInStock = Arrays.stream(arrInventoryResponse)</span>
+<span class="fc" id="L61">                    .allMatch(InventoryResponse::isInStock);</span>
+        }
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (allProductInStock) {</span>
+<span class="fc" id="L65">            order = orderRepository.save(order);</span>
+<span class="fc" id="L66">            log.info(&quot;ORDER SAVED SUCCESSFULLY, ID = &quot; + order.getId());</span>
+<span class="fc" id="L67">            kafkaTemplate.send(&quot;NotificationTopic&quot;, new OrderPlacedEvent(order.getOrderNumber()));</span>
+<span class="fc" id="L68">            log.info(&quot;NOTIF SENT SUCCESSFULLY, ORDER NUMBER = &quot; + order.getOrderNumber());</span>
+        } else {
+<span class="fc" id="L70">            throw new IllegalArgumentException(&quot;Product is not in stock, please try again later&quot;);</span>
+        }
+
+<span class="fc" id="L73">        return &quot;Order places successfully&quot;;</span>
+}
+
+    private OrderLineItems mapTo(OrderLineItemsDto orderLineItemsDto) {
+<span class="fc" id="L77">        String skuCode = orderLineItemsDto.getSkuCode();</span>
+<span class="fc" id="L78">        Integer qty = orderLineItemsDto.getQuantity();</span>
+<span class="fc" id="L79">        BigDecimal price = orderLineItemsDto.getPrice();</span>
+
+<span class="fc" id="L81">        OrderLineItems orderLineItems = new OrderLineItems();</span>
+<span class="fc" id="L82">        orderLineItems.setSkuCode(skuCode);</span>
+<span class="fc" id="L83">        orderLineItems.setQuantity(qty);</span>
+<span class="fc" id="L84">        orderLineItems.setPrice(price);</span>
+
+<span class="fc" id="L86">        return orderLineItems;</span>
+    }
+
+
+
+//    using feign client
+//    boolean isProductInStock = inventoryClient.isInStock(
+//    orderLineItemsDto.getSkuCode(), orderLineItemsDto.getQuantity());
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

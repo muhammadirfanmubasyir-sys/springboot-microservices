@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+product-service,com.irfan.microservices.product.service,ProductService,0,69,0,0,0,21,0,4,0,4
+product-service,com.irfan.microservices.product.controller,ProductController,0,9,0,0,0,2,0,2,0,2
+product-service,com.irfan.microservices.product.dto,ProductResponse,0,15,0,0,0,1,0,1,0,1
+product-service,com.irfan.microservices.product.dto,ProductRequest,0,15,0,0,0,1,0,1,0,1
+product-service,com.irfan.microservices.product,InstallOpenTelemetryAppender,0,10,0,0,0,5,0,2,0,2
+product-service,com.irfan.microservices.product,ProductServiceApplication,5,3,0,0,2,1,1,1,1,1
