@@ -118,6 +118,8 @@ class InventoryControllerTest {
                 "skuCodes", List.of("iPhone-50")
         );
 
+        org.mockito.Mockito.doNothing().when(inventoryService).releaseStock("ORDER-12345", List.of("iPhone-50"));
+
         mockMvc.perform(post("/api/inventory/release")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))
@@ -125,5 +127,7 @@ class InventoryControllerTest {
                 .andExpect(jsonPath("$.orderNumber").value("ORDER-12345"))
                 .andExpect(jsonPath("$.status").value("RELEASED"))
                 .andDo(print());
+
+        org.mockito.Mockito.verify(inventoryService).releaseStock("ORDER-12345", List.of("iPhone-50"));
     }
 }
