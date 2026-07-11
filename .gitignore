@@ -42,3 +42,6 @@ build/
 /grafana/
 /mongo-data/
 /mysql_keycloak_data/
+
+### Environment files ###
+.env
