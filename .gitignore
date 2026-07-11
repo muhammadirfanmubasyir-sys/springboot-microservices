@@ -45,3 +45,6 @@ build/
 
 ### Environment files ###
 .env
+benchmark/autocannon/node_modules/
+benchmark/autocannon/package.json
+benchmark/autocannon/package-lock.json
