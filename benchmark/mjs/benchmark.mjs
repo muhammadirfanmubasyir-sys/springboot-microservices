@@ -293,6 +293,15 @@ async function main() {
     )
   );
 
+  // Test 4: GET /api/inventory?skuCode=iPhone_15
+  allResults.push(
+    await benchmark(
+      "Inventory Service - GET Inventory",
+      "GET",
+      "/api/inventory?skuCode=iPhone_15"
+    )
+  );
+
   // Write individual markdown files
   const fs = await import("node:fs/promises");
 

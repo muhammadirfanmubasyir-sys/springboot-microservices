@@ -1,32 +1,32 @@
 # Benchmark Results: Product Service - POST Create Product
 
-**Date:** 2026-07-11T07:55:04.118Z
+**Date:** 2026-07-13T05:52:50.334Z
 **Target:** `POST http://api-gateway:8888/api/product`
 **Concurrency:** 10
-**Duration:** 10s (actual: 10.58s)
+**Duration:** 10s (actual: 12.43s)
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total Requests | 1769 |
-| Successful | 1769 |
+| Total Requests | 427 |
+| Successful | 427 |
 | Errors | 0 |
-| Requests/sec | **167.15** |
+| Requests/sec | **34.35** |
 
 ## Latency (ms)
 
 | Percentile | Value |
 |---|---|
-| Min | 19.17 |
-| Avg | 59.42 |
-| P50 | 56.24 |
-| P95 | 99.48 |
-| P99 | 122.61 |
-| Max | 167.82 |
+| Min | 79.72 |
+| Avg | 287.76 |
+| P50 | 227.47 |
+| P95 | 433.69 |
+| P99 | 2190.73 |
+| Max | 2265.42 |
 
 ## Status Codes
 
 | Code | Count |
 |---|---|
-| 201 | 1769 |
+| 201 | 427 |

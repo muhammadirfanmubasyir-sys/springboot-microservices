@@ -1,0 +1,34 @@
+{
+  "Inventory Service - GET Inventory" : {
+    "transaction" : "Inventory Service - GET Inventory",
+    "sampleCount" : 682,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 134.44281524926674,
+    "medianResTime" : 93.0,
+    "minResTime" : 31.0,
+    "maxResTime" : 1255.0,
+    "pct1ResTime" : 224.4000000000001,
+    "pct2ResTime" : 350.60000000000036,
+    "pct3ResTime" : 996.5299999999996,
+    "throughput" : 68.05708013172337,
+    "receivedKBytesPerSec" : 22.86292535675082,
+    "sentKBytesPerSec" : 103.8136319978046
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 682,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 134.44281524926674,
+    "medianResTime" : 93.0,
+    "minResTime" : 31.0,
+    "maxResTime" : 1255.0,
+    "pct1ResTime" : 224.4000000000001,
+    "pct2ResTime" : 350.60000000000036,
+    "pct3ResTime" : 996.5299999999996,
+    "throughput" : 68.05708013172337,
+    "receivedKBytesPerSec" : 22.86292535675082,
+    "sentKBytesPerSec" : 103.8136319978046
+  }
+}
