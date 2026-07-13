@@ -1,0 +1,34 @@
+{
+  "Product Service - POST Create Product" : {
+    "transaction" : "Product Service - POST Create Product",
+    "sampleCount" : 860,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 105.86046511627904,
+    "medianResTime" : 78.0,
+    "minResTime" : 16.0,
+    "maxResTime" : 751.0,
+    "pct1ResTime" : 191.0,
+    "pct2ResTime" : 253.6999999999996,
+    "pct3ResTime" : 701.4599999999998,
+    "throughput" : 86.4234750276354,
+    "receivedKBytesPerSec" : 37.04784302457039,
+    "sentKBytesPerSec" : 141.872911642046
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 860,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 105.86046511627904,
+    "medianResTime" : 78.0,
+    "minResTime" : 16.0,
+    "maxResTime" : 751.0,
+    "pct1ResTime" : 191.0,
+    "pct2ResTime" : 253.6999999999996,
+    "pct3ResTime" : 701.4599999999998,
+    "throughput" : 86.4234750276354,
+    "receivedKBytesPerSec" : 37.04784302457039,
+    "sentKBytesPerSec" : 141.872911642046
+  }
+}

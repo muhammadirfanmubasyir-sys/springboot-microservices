@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benchmark: Order Service - POST Create Order</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:40px auto;padding:0 20px;color:#333;background:#f8f9fa}
+    h1{color:#1a1a2e;border-bottom:3px solid #16213e;padding-bottom:10px}
+    .meta{color:#666;font-size:.9em;margin-bottom:20px}
+    table{width:100%;border-collapse:collapse;margin:20px 0;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+    th{background:#16213e;color:white;padding:12px 15px;text-align:left;font-weight:600}
+    td{padding:10px 15px;border-bottom:1px solid #eee}
+    tr:hover td{background:#f0f4ff}
+    .hl{font-weight:bold;color:#0f3460;font-size:1.1em}
+    .err{color:#e74c3c}.ok{color:#27ae60}
+    h2{color:#16213e;margin-top:30px}
+    code{background:#e8eaf6;padding:2px 6px;border-radius:4px;font-size:.9em}
+  </style>
+</head>
+<body>
+  <h1>Benchmark: Order Service - POST Create Order</h1>
+  <div class="meta"><strong>Date:</strong> 2026-07-13T06:17:11.350Z | <strong>Target:</strong> <code>POST http://api-gateway:8888/api/order</code> | <strong>Tool:</strong> JMeter 5.6.3</div>
+  <h2>Summary</h2>
+  <table><tr><th>Metric</th><th>Value</th></tr>
+    <tr><td>Total Requests</td><td>297</td></tr>
+    <tr><td>Successful</td><td class="ok">297</td></tr>
+    <tr><td>Errors</td><td class="">0</td></tr>
+    <tr><td>Requests/sec</td><td class="hl">31.59</td></tr>
+    <tr><td>Throughput</td><td>0.01 MB/s</td></tr>
+  </table>
+  <h2>Latency (ms)</h2>
+  <table><tr><th>Percentile</th><th>Value</th></tr>
+    <tr><td>Min</td><td>95</td></tr>
+    <tr><td>Average</td><td>306.98</td></tr>
+    <tr><td>P50</td><td>303</td></tr>
+    <tr><td>P90</td><td>439</td></tr>
+    <tr><td>P95</td><td>499</td></tr>
+    <tr><td>P99</td><td>625</td></tr>
+    <tr><td>Max</td><td>695</td></tr>
+  </table>
+  <h2>Status Codes</h2>
+  <table><tr><th>Code</th><th>Count</th></tr>
+    <tr><td>201</td><td>297</td></tr>
+  </table>
+</body></html>
