@@ -47,6 +47,8 @@ public class OrderController {
 
     @Observed(name="order.count")
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod_CB")
+    @Retry(name = "inventory")
+    @TimeLimiter(name ="inventory")
     @RateLimiter(name="inventory", fallbackMethod = "fallbackMethod_RL")
     public String placeOrder(@RequestBody OrderRequest orderRequest) {
         return orderService.placeOrder(orderRequest);
